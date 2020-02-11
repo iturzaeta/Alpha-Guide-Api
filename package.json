@@ -1,0 +1,44 @@
+{
+  "name": "alpha-guide-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "seeds": "node ./bin/seeds"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iturzaeta/Alpha-Guide-Api.git"
+  },
+  "author": "Cris & Sergio",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^3.0.7",
+    "bootstrap": "^4.4.1",
+    "cloudinary": "^1.17.0",
+    "connect-mongo": "^3.1.2",
+    "cookie-parser": "^1.4.4",
+    "cors": "^2.8.5",
+    "debug": "^4.1.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.0",
+    "faker": "^4.1.0",
+    "http-errors": "^1.7.3",
+    "mongoose": "^5.7.7",
+    "morgan": "^1.9.1",
+    "multer": "^1.4.2",
+    "multer-storage-cloudinary": "^2.2.1",
+    "nodemailer": "^6.4.2",
+    "passport": "^0.4.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  },
+  "bugs": {
+    "url": "https://github.com/iturzaeta/Alpha-Guide-Api/issues"
+  },
+  "homepage": "https://github.com/iturzaeta/Alpha-Guide-Api#readme"
+}
