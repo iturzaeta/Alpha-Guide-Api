@@ -29,7 +29,7 @@ module.exports.create = (req, res, next) => {
 
 ///////////////////////VALIDATE USER/////////////////////
 module.exports.validate = ( req, res, next ) =>{
-    User.findOneAndUpdate({ validateToken: req.params.token })
+    User.findOne({ validateToken: req.params.token })
     .then((user) => {
         if(user.validated){ //Check Validated and redirect
             res.send(`<h1>This email has been already validated</h1>`)
@@ -41,7 +41,7 @@ module.exports.validate = ( req, res, next ) =>{
             res.json(user)
         })}
     })
-    .catch(err => {console.log(err)})
+    .catch(next)
 
     // User.findOneAndUpdate({validateToken: req.params.validateToken}, {validate: true}, {new: true})
     // .then(user => res.status(200).json(user))
@@ -55,10 +55,14 @@ module.exports.validate = ( req, res, next ) =>{
 ////////////////////////////GET ALL USERS/////////////////////////////
 
 module.exports.getAll= (req, res, next) => {
-
-    const user = req.params.id
-    
-    User.find( { user } )
+    User.find()
+        .populate('trips')
+        .populate({
+            path: 'trips',
+            populate: {
+                path: 'country'
+            }
+        })
         .then(user => {
             res.json(user)
         })
@@ -70,9 +74,16 @@ module.exports.getAll= (req, res, next) => {
 
 module.exports.getOne = (req, res, next) => {
      
-    const id = req.params.id
+    const id = req.params.id || req.currentUser.id
 
     User.findById(id)
+        .populate('trips')
+        .populate({
+            path: 'trips',
+            populate: {
+                path: 'country'
+            }
+        })
         .then(user => {
             res.json(user)
         })
@@ -84,15 +95,17 @@ module.exports.getOne = (req, res, next) => {
 
 module.exports.edit = (req, res, next) => {
 
-    
-    const id = req.params.id
-    const user = req.body
+    console.log('BODYYYYYYYY', req.body)
+    const id = req.currentUser.id
+    const user = { ...req.body, image: req.file ? req.file.url : req.currentUser.image }
 
     User.findByIdAndUpdate(id, user, {new: true})
         .then(user => {
+            console.log('USUARIOA ACTUALIZADO', user)
             if(!user) {
                 res.json({message: "User not found"})
             }else{
+                console.log(user)
                 res.json(user)
             }
         }).catch(next)
@@ -102,23 +115,22 @@ module.exports.edit = (req, res, next) => {
 
 module.exports.login = (req, res, next) => {
     const {email, password} = req.body
+
     if(!email || !password){
-        return res.json({message: 'email and password required'})
+       throw createError(400, 'Missing credentials')
     }
     User.findOne({ email: email, validated: true})
         .then(user => {
             if(!user) {
-                res.json({message: 'User not found'})
+                throw createError(400, 'Invalid user or password')
             }else{
                return user.checkPassword(password)
                 .then(match => {
                     if(match){
                     req.session.user = user;
-                    //res.json(user)
-                    res.json('login ok :D')
-        
+                    res.json(user)
                 }else{
-                    res.json({message: 'User not found'})
+                    throw createError(400, 'Invalid user or password')
                 }
                 })
             }
@@ -129,6 +141,7 @@ module.exports.login = (req, res, next) => {
 ///////////////////////////LOG OUT/////////////////////////
 
 module.exports.logout = (req, res) => {
+    console.log('kasdnalkns')
     req.session.destroy();
     res.clearCookie("connect.sid") //destroy cookie nav
     res.json('logout succeded');

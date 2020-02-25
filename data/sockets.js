@@ -1,3 +1,8 @@
+//////////////////METER A PELO EN EL MODELO Y EN SEEDS
+
+
+
+
 const plugs = [
       {
         "country":"Abu Dhabi", 

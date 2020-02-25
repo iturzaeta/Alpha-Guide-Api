@@ -1,35 +1,43 @@
 const mongoose = require('mongoose');
 
+const tripSchema = new mongoose.Schema(
+    
+    {
+        country: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Country',
+            required: true  
+        },
+        start_date: {
+            type: String
+        },
 
+        end_date: {
+            type: String
+        },
 
-const tripSchema = new moongose.Schema({
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            required: true
+        }
 
-    country: {
-        type: String
     },
 
-    start_date: {
-        type: Date,
-        required: true
-    },
-
-    end_date: {
-        type: Date,
-        required: true
-    },
-
-    trip_days: {
-        type: Number,
-        required: true
-    },
-
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
+    {
+        timestamps: true,
+        toJSON: {
+            virtuals: true,
+            transform: (doc, ret) => {
+                ret.id = doc._id;
+                delete ret._id;
+                delete ret.__v;
+                return ret;
+            }
+        }
     }
 
-})
+)
 
 
 

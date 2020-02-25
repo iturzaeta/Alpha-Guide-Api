@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const SALT_WORK_FACTOR = 10
 
-const {countryList} = require('../const.js');
+const {countryList} = require('../const/countryList');
 
 const EMAIL_PATTERN = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: ""
   },
-  country: {
+  country: { //aqui ponerlo como objeto
     type: String,
     required: true,
     enum: countryList
@@ -58,13 +58,7 @@ const userSchema = new mongoose.Schema({
   validated: {
     type: Boolean,
     default: false
-  },
-
-  trips: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Trip',
   }
-
 }, 
 
 {
@@ -98,6 +92,14 @@ userSchema.pre('save', function(next) {
       .catch(error => next(error))
   }
 });
+
+userSchema.virtual('trips', {
+  ref: 'Trip',
+  localField: '_id',
+  foreignField: 'user',
+  justOne: false,
+});
+
 
 userSchema.methods.checkPassword = function(password) {
   return bcrypt.compare(password, this.password);

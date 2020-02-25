@@ -6,6 +6,9 @@ const express = require('express');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
+const axios = require('axios')
+const Country = require('./models/country.model')
+const cors = require('./config/cors.config')
 
 /**
  * DB config
@@ -16,12 +19,11 @@ const passportConfig = require('./config/passport.config')
 const session = require('./config/session.config');
 
 
-
-
 /**
  * Configure express
  */
 const app = express();
+app.use(cors)
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -33,6 +35,7 @@ app.use((req, _, next) => {
     req.currentUser = req.session.user
     next()
 })
+
 
 
 /**
@@ -77,11 +80,14 @@ app.listen(port, () => {
     console.log(`Listening on port ${port}`);
 });
 
+
 // Helper functions
 
 /**
  * Normalize a port into a number, string, or false.
  */
+
+
 function normalizePort(val) {
     var port = parseInt(val, 10);
     if (isNaN(port)) {
