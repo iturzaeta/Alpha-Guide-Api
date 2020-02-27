@@ -9,11 +9,11 @@ const tripSchema = new mongoose.Schema(
             required: true  
         },
         start_date: {
-            type: String
+            type: Date
         },
 
         end_date: {
-            type: String
+            type: Date
         },
 
         user: {
