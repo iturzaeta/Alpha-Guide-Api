@@ -16,6 +16,14 @@ const tripSchema = new mongoose.Schema(
             type: Date
         },
 
+        tripKm: {
+            type: Number
+        },
+
+        tripDays: {
+            type: Number
+        },
+
         user: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',

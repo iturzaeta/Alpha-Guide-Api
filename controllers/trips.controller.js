@@ -1,31 +1,48 @@
 const Trip = require('../models/trip.model')
 const createError = require('http-errors')
+const Country = require('../models/country.model')
+const countries = require('../bin/seeds')
+const geodist = require('geodist')
 
+
+///////////////////////////// CREATE /////////////////////////////////
 
 module.exports.create = (req, res, next) => {
-    console.log(req.currentUser)
+    const origin = {
+        lat: req.params.lat,
+        lon: req.params.lon
+    }
     
-    const trip = new Trip ({
-        country: req.body.country,
-        start_date: req.body.start_date,
-        end_date: req.body.end_date,
-        user: req.currentUser.id
-    })
-
-    trip.save()
+    Country.findOne({ name: req.body.country })
+        .then (country => {
+            if(!country) {
+                throw createError(404, 'Country not found')
+            } else {
+                let destiny = country.coordinates
+                console.log('TODOOOOOOO', geodist(origin, destiny, {exact: true, unit: 'km'}))
+                const trip = new Trip ({
+                    country: country,
+                    start_date: req.body.start_date,
+                    end_date: req.body.end_date,
+                    user: req.currentUser.id,
+                    tripDays: req.body.tripDays,
+                    tripKm: geodist(origin, destiny, {exact: true, unit: 'km'})
+                })
+                return trip.save()
+            } 
+        })
         .then((trip) => {
             res.json(trip)
         })
         .catch(next)
 }
 
-
+///////////////////////////////// EDIT ////////////////////////////
 
 module.exports.edit = (req, res, next) => {
     const id = req.params.id
     req.body
 
-    console.log({ id })
 
     Trip.findById(id)
         .populate('user')
@@ -48,3 +65,26 @@ module.exports.edit = (req, res, next) => {
         })
         .catch(next)
 }
+
+///////////////////////////////// FIND ONE ////////////////////////////
+
+module.exports.findTrip = (req, res, next) => {
+     
+    const id = req.params.id
+
+    Trip.findById(id)
+        .populate('country')
+        .populate('user')
+        .populate({
+            path: 'trips',
+            populate: {
+                path: 'country'
+            }
+        })
+        .then(trip => {
+            res.json(trip)
+            // console.log("TRIP DEL BACK =>", trip)
+        })
+        .catch(next)
+}
+

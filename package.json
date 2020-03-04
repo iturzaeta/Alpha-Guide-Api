@@ -27,6 +27,7 @@
     "express": "^4.17.1",
     "express-session": "^1.17.0",
     "faker": "^4.1.0",
+    "geodist": "^0.2.1",
     "google-translator": "^1.0.0",
     "hello-international": "^2.2.1",
     "http-errors": "^1.7.3",

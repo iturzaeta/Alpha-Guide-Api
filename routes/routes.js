@@ -12,7 +12,7 @@ router.get('/') //Home
 
 ///////////////USER/////////////////
 
-router.post('/users/:id/delete', authMiddleware.isAuthenticated, usersController.delete)
+router.post('/users/:id/delete', usersController.delete)
 router.patch('/users/profile', authMiddleware.isAuthenticated, upload.single('image'), usersController.edit)
 router.get('/users/:id', usersController.getOne)
 router.get('/users/profile',authMiddleware.isAuthenticated, usersController.getOne)
@@ -28,9 +28,9 @@ router.post('/logout', authMiddleware.isAuthenticated, usersController.logout)
 
 ////////////////TRIPS/////////////////
 
-router.post('/trips', authMiddleware.isAuthenticated, tripsController.create)
+router.post('/trips/:lat/:lon', authMiddleware.isAuthenticated, tripsController.create)
 router.patch('/trips/:id', authMiddleware.isAuthenticated, tripsController.edit)
-
+router.get('/trip/:id', tripsController.findTrip)
 
 ////////////////COUNTRIES/////////////
 

@@ -95,17 +95,21 @@ module.exports.getOne = (req, res, next) => {
 
 module.exports.edit = (req, res, next) => {
 
-    console.log('BODYYYYYYYY', req.body)
     const id = req.currentUser.id
     const user = { ...req.body, image: req.file ? req.file.url : req.currentUser.image }
 
     User.findByIdAndUpdate(id, user, {new: true})
+        .populate('trips')
+        .populate({
+            path: 'trips',
+            populate: {
+                path: 'country'
+            }
+        })
         .then(user => {
-            console.log('USUARIOA ACTUALIZADO', user)
             if(!user) {
                 res.json({message: "User not found"})
             }else{
-                console.log(user)
                 res.json(user)
             }
         }).catch(next)
@@ -120,6 +124,13 @@ module.exports.login = (req, res, next) => {
        throw createError(400, 'Missing credentials')
     }
     User.findOne({ email: email, validated: true})
+        .populate('trips')
+        .populate({
+            path: 'trips',
+            populate: {
+                path: 'country'
+            }
+        })
         .then(user => {
             if(!user) {
                 throw createError(400, 'Invalid user or password')

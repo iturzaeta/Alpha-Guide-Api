@@ -53,7 +53,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     unique: true,
     default: tokenRandomGenerate,
-},
+  },
+
+  km: {
+    type: Number
+  },
 
   validated: {
     type: Boolean,

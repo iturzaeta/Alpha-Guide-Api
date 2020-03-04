@@ -22,6 +22,10 @@ const countrySchema = new mongoose.Schema(
             required: true
         },
 
+        currencyName: {
+            type: String
+        },
+
         docCode: {
             type: Number,
             unique: true,
@@ -36,7 +40,12 @@ const countrySchema = new mongoose.Schema(
 
         plugs: {
             type: Object
+        },
+
+        coordinates: {
+            type: Object
         }
+
     },
     {
         timestamps: true,
