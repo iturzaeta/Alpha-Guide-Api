@@ -88,3 +88,17 @@ module.exports.findTrip = (req, res, next) => {
         .catch(next)
 }
 
+
+//////////////////////// DELETE /////////////////////////
+
+module.exports.delete = (req, res, next) => {
+    console.log('ENTRAAAAAAAAAAA', req.params.id)
+    Trip.findByIdAndRemove(req.params.id)
+    .then((trip) =>{
+        console.log("TRIP MADA=>", trip)
+      res.json(trip)
+    })
+    .catch(err => next(err))
+  
+  }
+

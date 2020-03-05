@@ -19,7 +19,7 @@ router.get('/users/profile',authMiddleware.isAuthenticated, usersController.getO
 router.post('/users', authMiddleware.isNotAuthenticated, upload.single('image'), usersController.create)
 router.get('/users', usersController.getAll)
 
-router.get('/users/:token/validate',authMiddleware.isNotAuthenticated, usersController.validate);
+router.get('/users/:token/validate', usersController.validate);
 
 router.post('/login', authMiddleware.isNotAuthenticated, usersController.login)
 
@@ -29,8 +29,9 @@ router.post('/logout', authMiddleware.isAuthenticated, usersController.logout)
 ////////////////TRIPS/////////////////
 
 router.post('/trips/:lat/:lon', authMiddleware.isAuthenticated, tripsController.create)
-router.patch('/trips/:id', authMiddleware.isAuthenticated, tripsController.edit)
+// router.patch('/trips/:id', authMiddleware.isAuthenticated, tripsController.edit)
 router.get('/trip/:id', tripsController.findTrip)
+router.post('/trip/:id/delete', tripsController.delete)
 
 ////////////////COUNTRIES/////////////
 

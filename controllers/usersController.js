@@ -32,7 +32,7 @@ module.exports.validate = ( req, res, next ) =>{
     User.findOne({ validateToken: req.params.token })
     .then((user) => {
         if(user.validated){ //Check Validated and redirect
-            res.send(`<h1>This email has been already validated</h1>`)
+            res.redirect(`http://localhost:3001/users/${req.params.token}/validate`)
 
         } else {
         user.validated = true;

@@ -15,8 +15,10 @@ module.exports.sendValidateEmail = (targetUser) => {
         from:`Alpha-Guide App email validation`,
         to: targetUser.email,
         subject: `Welcome to Alpha-Guide App ${user}`,
-        html: `<h1> Welcome to Alpha Guide </h1>
-                <p> Click the link below to validate your account </p>
+        html: 
+        
+        `   <h1> Welcome to Alpha Guide </h1>
+            <p> Click the link below to validate your account </p>
             <a href='${HOST}/users/${targetUser.validateToken}/validate'>Confirm account</a>
         `
     })
